@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>First Project</title>
+        <style>
+            #sor button{
+                margin-left:10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1><i>Learn the English Letters</i></h1><br>
+        <span> <i>Number of Letters </i> </span>
+        <input type="number" name="letters" id="letter_num">
+        <button type="button" id="button" onclick="show()">Generate</button><br>
+        <span id="error" style="color:red"></span><br>
+        <div id="pop"></div><br>
+        <img src="" alt="" id="imgsrc" width="320px"height="420px">
+
+        <script>
+            // make array of src links to prevent the repeatation of lines and using loop
+            var arr=new Array("images/a.jpg","images/b.jpg","images/c.jpg","images/d.jpg","images/e.jpg","images/f.jpg","images/g.jpg","images/h.jpg","images/i.jpg","images/j.jpg","images/k.jpg","images/l.jpg","images/m.jpg",
+            "images/n.jpg","images/o.jpg","images/p.jpg","images/q.jpg","images/r.jpg","images/s.jpg","images/t.jpg","images/u.jpg","images/v.jpg","images/w.jpg","images/x.jpg","images/y.jpg","images/z.jpg");
+            var x=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+
+            function show(){
+                var r=document.getElementById("letter_num").value;
+
+                // check if value of textbox greater than 1 and less than 26 to be able to continue
+                if(r<1||r>26)
+                    document.getElementById('error').innerHTML="the number of lettes should be a number between 1 and 26"
+                else{
+                    // creating buttons by looping from 0 to the value of textbox(r)
+                    for(i=0;i<r;i++){
+                        var s=document.createElement("button");
+                        // to get random number between 1 and 26
+                        var num=Math.floor(Math.random()*(26-1));
+                        var w=document.createTextNode(x[num]);
+                        // to append buttons to the document
+                        s.appendChild(w);
+                        // add event when click on the button to show the photo
+                        s.addEventListener('click',function(e){
+                            var q=this.textContent;
+                            for(i=0;i<26;i++)
+                                if(q==x[i])
+                                    // to add source of the image to image tag
+                                    document.getElementById('imgsrc').src=arr[i];
+                            // store the click event in localstorage if it found; appending the event to the previous events.
+                            if(localStorage.getItem('mo')!==null){
+                                var jsonstr = localStorage.getItem('mo');
+                                // parsing the string to json object
+                                var json = JSON.parse(jsonstr);
+                                // the content of event that stores in localstorage contains: type of event, value and the date that event created at it.
+                                var az=e.type+"  "+e.target.value+" "+new Date();
+                                json.key.push(az);
+                                // convert the json object to string.
+                                jsonstr = JSON.stringify(json);
+                                // adding event to localstorage using the key mo.
+                                localStorage.setItem('mo',jsonstr);
+                            }
+                            // store the click event in localstorage if it not found and create new event and store it in localstorage by using json.
+                            else{
+                                var json=
+                                    {
+                                    'key':[
+                                          ]
+                                    };
+                                var az=e.type+"  "+e.target.value+" "+new Date();
+                                json.key.push(az);
+                                jsonstr = JSON.stringify(json);
+                                localStorage.setItem('mo',jsonstr);
+                            }
+                        });
+                        var qqq=document.getElementById('pop');
+                        qqq.appendChild(s);
+                    }
+                }
+            }
+            document.getElementById('button').addEventListener('click',function(e){
+                if(localStorage.getItem('button_click')!==null){
+                    var jsonstr = localStorage.getItem('button_click');
+                    var json2 = JSON.parse(jsonstr);
+                    var az=e.type+"  "+e.target.value+" "+new Date();
+                    json2.key.push(az);
+                    jsonstr = JSON.stringify(json2);
+                    localStorage.setItem('button_click',jsonstr);
+                }
+                else{
+                    var json2=
+                        {
+                        'key':[
+                              ]
+                        };
+                    var az=e.type+"  "+e.target.value+" "+new Date();
+                    json2.key.push(az);
+                    jsonstr = JSON.stringify(json2);
+                    localStorage.setItem('button_click',jsonstr);
+                }
+				
+            });
+			// The function clearloc that clear the localstorage every 5 seconds.
+			window.setInterval(clearLoc,5000);
+			function clearLoc(){
+				localStorage.clear();
+			}
+        </script>
+    </body>
+</html>
